@@ -15,8 +15,10 @@ var plugins = module.parent.exports;
 var SocketPlugins = require.main.require('./src/socket.io/plugins');
 SocketPlugins.markdown = require('./websockets');
 
-var	parser;
+var katex = require('katex');
+var MarkdownItTexmath = require('markdown-it-texmath').use(katex);
 
+var	parser;
 var Markdown = {
 	config: {},
 	onLoad: function (params, callback) {
@@ -114,8 +116,7 @@ var Markdown = {
 				_self.config.highlightLinesLanguageList = _self.config.highlightLinesLanguageList.join(',').split(',');
 			}
 
-			parser = new MarkdownIt(_self.config);
-
+			parser = new MarkdownIt(_self.config).use(MarkdownItTexmath);
 			Markdown.updateParserRules(parser);
 		});
 	},
@@ -185,6 +186,7 @@ var Markdown = {
 	postParse: function (payload, next) {
 		var italicMention = /@<em>([^<]+)<\/em>/g;
 		var boldMention = /@<strong>([^<]+)<\/strong>/g;
+		var svgMention = /<svg(.|\n)+?<\/svg>/gm;
 		var execute = function (html) {
 			// Replace all italicised mentions back to regular mentions
 			if (italicMention.test(html)) {
@@ -195,6 +197,14 @@ var Markdown = {
 				html = html.replace(boldMention, function (match, slug) {
 					return '@__' + slug + '__';
 				});
+			} else if (svgMention.test(html)) {
+				/* It is pain to allow the support for base64 because this requires to support data scheme
+        but in nodebb/src/posts, the attribute schemesByTag (ses sanitize-html) is not given
+        just support svg tag + path as they seem to be the only tag to allow
+        html = html.replace(svgMention, function (match, slug) {
+          var ns = 'xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" '
+          return '<img src="data:image/svg+xml;base64,' + Buffer.from(match.replace('<svg', '<svg ' + ns)).toString('base64')+'" />'
+        }); */
 			}
 
 			return html;
@@ -207,7 +217,6 @@ var Markdown = {
 		} else {
 			payload = execute(payload);
 		}
-
 		next(null, payload);
 	},
 
@@ -242,7 +251,10 @@ var Markdown = {
 
 	updateSanitizeConfig: async (config) => {
 		config.allowedTags.push('input');
-		config.allowedAttributes.input = ['type', 'checked'];
+		config.allowedTags.push('svg');
+		config.allowedTags.push('path');
+		config.allowedAttributes.svg = ['viewbox', 'width', 'height', 'preserveaspectratio'];
+		config.allowedAttributes.path = ['d'];
 		config.allowedAttributes.ol.push('start');
 		config.allowedAttributes.th.push('colspan', 'rowspan');
 		config.allowedAttributes.td.push('colspan', 'rowspan');
@@ -261,10 +273,10 @@ var Markdown = {
 
 		if (Markdown.config.multimdTables) {
 			parser.use(require('markdown-it-multimd-table'), {
-				multiline:  true,
-				rowspan:    true,
+				multiline: true,
+				rowspan: true,
 				headerless: true,
-			})
+			});
 		}
 
 		parser.use((md) => {

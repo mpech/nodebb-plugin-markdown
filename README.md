@@ -1,9 +1,26 @@
-# NodeBB Markdown Parser
+# NodeBB Markdown Parser + katex
 
-This NodeBB plugin is a parser that allows users to write posts using [Markdown](https://daringfireball.net/projects/markdown/).
+[original is from julianm](https://github.com/julianlam/nodebb-plugin-markdown)
 
-To customise options for the parser, please consult the "Markdown" page in the administration panel, under the "Plugins" heading.
+Here, katex is added
+
+This repo implements
+
+- what's specified in [this post](https://community.nodebb.org/topic/14141/proper-way-to-add-latex-with-markdown-it-texmath-and-katex-to-nodebb-plugin-markdown)
+- the support for the svg square root
+
 
 ## Installation
 
-    npm install nodebb-plugin-markdown
+Install the plugin
+
+    npm install nodebb-plugin-markdown-katex
+
+Disable ```nodebb-plugin-markdown``` from administration panel (and check this one is active)
+
+## Delivering
+
+If uping katex remember to copy
+
+- ```node_modules/katex/dist/katex.min.css``` to ```thisPlugin/public/less/katex.min.less```
+- ```node_modules/katex/dist/fonts``` to ```thisPlugin/public/fonts```

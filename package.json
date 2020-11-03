@@ -1,21 +1,21 @@
 {
-  "name": "nodebb-plugin-markdown",
+  "name": "nodebb-plugin-markdown-katex",
   "version": "8.12.1",
   "description": "A Markdown parser for NodeBB",
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/julianlam/nodebb-plugin-markdown"
+    "url": "https://github.com/mpech/nodebb-plugin-markdown-katex"
   },
   "keywords": [
     "nodebb",
     "plugin",
     "markdown"
   ],
-  "author": "Julian Lam <julian@designcreateplay.com>",
+  "author": "mpech <mpech404@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/julianlam/nodebb-plugin-markdown/issues"
+    "url": "https://github.com/mpech/nodebb-plugin-markdown-katex/issues"
   },
   "husky": {
     "hooks": {
@@ -34,7 +34,9 @@
     "highlight.js": "9.14.2",
     "markdown-it": "^10.0.0",
     "markdown-it-checkbox": "^1.1.0",
-    "markdown-it-multimd-table": "^4.0.1"
+    "markdown-it-multimd-table": "^4.0.1",
+    "katex": "0.12.0",
+    "markdown-it-texmath": "0.8.0"
   },
   "nbbpm": {
     "compatibility": "^1.6.0"

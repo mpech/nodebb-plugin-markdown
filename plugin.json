@@ -1,11 +1,12 @@
 {
-    "id": "nodebb-plugin-markdown",
-    "name": "Markdown Parser",
-    "description": "A Markdown parser for NodeBB",
-    "url": "https://github.com/julianlam/nodebb-plugin-markdown",
+    "id": "nodebb-plugin-markdown-katex",
+    "name": "Markdown Parser with katex",
+    "description": "A Markdown parser for NodeBB, source copied from github.com/juliam",
+    "url": "https://github.com/mpech/nodebb-plugin-markdown-katex",
     "library": "./index.js",
     "less": [
-        "public/less/default.less"
+        "public/less/default.less",
+        "public/less/katex.min.less"
     ],
     "scripts": [
         "public/js/client.js"
@@ -15,7 +16,8 @@
     ],
     "staticDirs": {
         "styles": "../highlight.js/styles",
-        "js": "public/js"
+        "js": "public/js",
+        "fonts": "public/fonts"
     },
     "modules": [
         "./public/js/highlight.js",
